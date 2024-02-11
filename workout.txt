@@ -1,0 +1,10 @@
+insert into employee values(1001, 'John Doe', 'Manager', 10, 'HR', '10-Jan-2023', 60000);
+insert into employee values(1002, 'Jane Smith', 'Engineer', 20, 'Marketing', '10-Feb-2023', 55000);
+insert into employee values(1003, 'Michael Johnson', 'Analyst', 30, 'Sales', '22-Mar-2023', 50000);
+insert into employee values(1004, 'Emily Williams', 'Clerk', 40, 'Finance', '05-Apr-2023', 45000);
+insert into employee values(1005, 'David Brown', 'Technician', 20, 'Marketing', '18-May-2023', 48000);
+insert into employee values(1006, 'Sarah Martinez', 'Manager', 10, 'HR', '28-Jun-2023', 62000);
+insert into employee values(1007, 'Daniel Wilson', 'Salesman', 30, 'Sales', '14-Jul-2023', 52000);
+insert into employee values(1008, 'Laura Garcia', 'Engineer', 20, 'Marketing', '30-Aug-2023', 57000);
+insert into employee values(1009, 'Christopher Lee', 'Analyst', 30, 'Sales', '07-Sep-2023', 49000);
+insert into employee values(1010, 'Amanda Rodriguez', 'Clerk', 40, 'Finance', '12-Oct-2023', 46000);

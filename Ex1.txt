@@ -1,0 +1,77 @@
+REM Exercise 1
+REM*************
+
+
+REM DROPing the relations
+REM----------------------
+
+drop table ddept;
+
+REM: 1. Create table DEPT with following columns and data types.
+
+create table ddept(deptno number(2) NOT NULL, dname char(14), location char(13));
+
+REM: 2. Insert in the DEPT table the following rows 
+
+insert into ddept values(10,'Accounting', 'Newyork');
+insert into ddept values(20,'Research', 'Chicago');
+insert into ddept values(30,'Sales', 'Dallas');
+insert into ddept values(40,'Operations', 'Boston');
+
+REM: 3. Insert yourself as a new employee into EMP table. 
+create table empp(id number(3), name varchar(30), salary number(10));
+
+insert into empp values(1,'Nadhim', '300');
+insert into empp values(2,'Syed', '300');
+insert into empp values(3,'Srikanth', '300');
+insert into empp values(4,'Sharan', '300');
+insert into empp values(5,'Pranav', '300');
+
+REM: 4. Add a new department into the DEPT table with a department number of 99
+location of Mani, and a department name of education. 
+ insert into ddept values(99,'Education', 'Mani');
+
+REM: 5. Update your own employee data by giving yourself a raise of $1000 per month. 
+update empp set salary=salary+1000 where id=1
+
+REM: 6. View the changes you have just done. 
+select*from empp;
+
+REM: 7.delete yourself from empp table
+delete from empp where id=1;
+
+REM: 8. Select from EMP table to check whether the row is existing. 
+select*from empp
+
+REM: 9. Create a duplicate EMP table name is EMPTEST
+create table emptest as select*from empp
+
+REM: 10. Add a new column named SEX to the EMPTEST table with data type of character
+and length 1.
+
+alter table emptest add sex char(1);
+
+REM: 11. Display and see the structure of table EMPTEST. 
+
+desc emptest
+select*from emptest;
+
+
+REM: 12. The user have changed their mind. Instead of storing SEX as F or M, they want to
+store SEX as MALE or FEMALE. So increase the size of the SEX column. 
+
+alter table emptest add sex char(6);
+
+REM: 13. Display each employee’s name and hire date. 
+select ename, hiredate from emp;
+
+REM: 14. Display the information in the above query with hire date appearing first. 
+select hiredate, ename from emp;
+
+
+
+
+
+
+
+

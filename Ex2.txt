@@ -1,0 +1,203 @@
+REM SAMPLE DEMO
+REM*************
+
+REM DROPing the relations
+REM----------------------
+
+drop table student;
+
+
+REM: CREATING EMPLOYEE TABLE (GIVEN)
+
+create table employee(
+empno number,
+name varchar2(30),
+designation varchar(30),
+deptno number,
+deptname varchar(30),
+date_of_joining date,
+salary number);
+
+
+REM: Inserting 10 appropriate values
+
+insert into employee values(1001, 'John Doe', 'Manager', 10, 'HR', '10-Jan-2023', 60000);
+insert into employee values(1002, 'Jane Smith', 'Engineer', 20, 'Marketing', '10-Feb-2023', 55000);
+insert into employee values(1003, 'Michael Johnson', 'Analyst', 30, 'Sales', '22-Mar-2023', 50000);
+insert into employee values(1004, 'Emily Williams', 'Clerk', 40, 'Finance', '05-Apr-2023', 45000);
+insert into employee values(1005, 'David Brown', 'Technician', 20, 'Marketing', '18-May-2023', 48000);
+insert into employee values(1006, 'Sarah Martinez', 'Manager', 10, 'HR', '28-Jun-2023', 62000);
+insert into employee values(1007, 'Daniel Wilson', 'Salesman', 30, 'Sales', '14-Jul-2023', 52000);
+insert into employee values(1008, 'Laura Garcia', 'Engineer', 20, 'Marketing', '30-Aug-2023', 57000);
+insert into employee values(1009, 'Christopher Lee', 'Analyst', 30, 'Sales', '07-Sep-2023', 49000);
+insert into employee values(1010, 'Amanda Rodriguez', 'Clerk', 40, 'Finance', '12-Oct-2023', 46000);
+
+REM: 1) List all the employees belonging to department number 10. 
+
+select name from employee where deptno=10;
+
+REM: 2) List the name and salary of the employees whose salary is greater than 1000. 
+
+select name, salary from employee where salary>1000;
+
+REM: 3) List the name of the clerks working in department number 20. 
+
+select name from employee where designation ='Clerk'and deptno=20;
+
+REM: 4) List the employee number and name of the managers. 
+
+select empno, name from employee where designation ='Manager';
+
+REM: 5) List the names of analysts and salesmen
+select name from employee where designation ='Manager' or designation ='Salesman';
+
+
+REM: 6) List the details of the employees who have joined before the end of 30 September
+80.
+
+select * from employee where date_of_joining <='30-sep-1980';
+
+
+REM: 7) List the employees who are not managers. 
+
+select name from employee where designation!='Manager';
+
+REM: 8) List the name of the employees whose employee numbers are 7369 and 7521. 
+
+select name from employee where empno=7369 or empno=7521;
+
+REM: 9) List the details of the employees not belonging to the departments 10, 30 and 40. 
+
+select * from employee where deptno=10 or deptno=30 or deptno=40;
+
+REM: 10) List the name and salary for the employees whose salary is between 1000 and
+2000.
+
+select name, salary from employee where salary>1000 and salary<2000;
+
+REM: 11) List the names of the employees who have joined before 30 June 81 and after 31
+Dec 81.
+
+select name from employee date_of_joining<'30-jun-81' and date_of_joining>'31-dec-81';
+
+REM:  12) List the different jobs in the employee table
+
+select distinct designation from employee;
+
+REM: 13) List the names of the employees who are not eligible for commission
+alter table employee add commission number(30);
+update employee set comission=null;
+select name from employee where commission=null;
+
+REM: 14) List the name and designation of the employees who does not report to anybody.
+select name,designation from employee where designation='Manager';
+
+REM: 15) List the details of employees who are not assigned to any department.
+select * from employee where deptno=null;
+
+REM: 16) List the details of employees who are eligible for commission.
+
+select * from employee where commission!=null;
+
+REM: 17) List the details of employees whose salary is greater than 2000 and have no
+commission. 
+
+select * from employee where commission=null and salary>2000;
+
+
+REM: 18) List the details of employees whose name start with ‘S’
+select * from employee where name like 'S%';
+
+
+
+REM: 19) List the names of employees whose name end with ‘s’
+select name from employee where name like '%s';
+
+
+REM: 20) List the names of the employees whose name has exactly 5 characters. 
+
+select name from employee where length(name)=5;
+
+
+REM: 21) List the names of employees whose name has ‘i’ as second character
+select name from employee where substr(name,2,1)='i';
+
+REM: 22) List the names of the employees in ascending order of their salaries.
+select name from employee order by salary;
+
+REM:23) List the name, salary and PF amount which is 10% of the salary of all employees.
+select name, salary, (1/10)*salary as pf from employee; 
+
+REM: 24) List the name, salary, designation and department number of employees in the
+descending order of their department number
+
+select name,salary,designation, deptno from employee order by deptno desc;
+
+REM: 25) List the total number of employees
+select count(*) from employee;
+
+REM:26) List the number of distinct jobs available. 
+
+select distinct designation from employee;
+
+REM: 27) List the total salaries of the employees. 
+
+select sum(salary) from employee;
+
+
+REM: 28) List the average salary and number of employees belonging to department number
+20. 
+
+
+select sum(salary)/count(*) as avg_salary, count(*) as total_empl from employee where deptno=20;
+
+
+REM: 29) List the department number and number of employees in each department
+
+select deptno, count(*) from employee group by deptno;
+
+
+REM: 30) List the department number and total of salaries in each department. 
+
+select deptno, sum(salary) from employee group by deptno;
+
+REM: 31) List the jobs and number of employees in each job. The result should be in
+ascending order of number of employees in each department
+
+
+select designation, count(*) as total_emp from employee group by designation order by total_emp asc;
+
+
+REM: 32) List the jobs, maximum salary, minimum salary, average salary from employees
+according to their designation.
+
+select designation, max(salary), min(salary), avg(salary) from employee group by designation;
+
+
+REM: 33) List the average salary of employees for each job excluding the manager. 
+
+select designation, avg(salary) from employee where designation!='Manager' group by designation;
+
+REM: 34) List the department number, job and average salary of employees for all jobs
+according to their department numbers.
+
+select deptno, designation, avg(salary) from employee group by deptno,designation;
+
+REM: 35) List the department number and average salary of employees belonging to
+departments which employ more than 5 employees. 
+
+select deptno, avg(salary) from employee group by deptno having count(deptno)>5;
+
+REM: 36) List the jobs of employees where the maximum salary of the job is greater than or
+equal to 5000
+
+select designation from employee group by designation having max(salary)>5000 or max(salary)=5000;
+
+
+REM: 37) List the total salary, minimum salary, maximum salary and average salary of the
+employees belonging to department 20. Display only those rows having their
+average salary greater than 1000.
+
+select sum(salary), min(salary), max(salary), avg(salary) as avg_salary from employee where deptno=20 having avg(salary)>1000;
+
+
