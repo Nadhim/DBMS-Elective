@@ -1,0 +1,51 @@
+REM: Exercise 3
+
+REM: 9. Display firsy name, job id and salary of all the employees.
+
+select first_name, job_id, salary from employees;
+
+REM: 10. Display the id, name(first & last), salary and annual salary of all the employees.
+Sort the employees by first name. Label the columns as shown below:
+(EMPLOYEE_ID, FULL NAME, MONTHLY SAL, ANNUAL SALARY)
+
+select employee_id as EMPLOYEE_ID, first_name||' '||last_name as "FULL NAME", salary as "MONTHLY SAL", salary*12 as "ANNUAL SALARY" from employees order by first_name
+
+REM: 11. List the different jobs in which the employees are working for.
+
+select distinct(job_id) from employees;
+
+REM: 12. Display the id, first name, job id, salary and commission of employees who are
+earning commissions
+
+select employee_id, first_name, job_id, salary, commission_pct*salary as commission from employees where commission_pct is not null;
+
+REM: 13. Display the details (id, first name, job id, salary and dept id) of employees who
+are MANAGERS.
+
+select employee_id, job_id, salary, department_id from employees where manager_id is not null
+
+REM: 14. Display the details of employees other than sales representatives (id, first name,
+hire date, job id, salary and dept id) who are hired after ‘01-May-1999’ or whose
+salary is at least 10000.
+
+select employee_id, first_name, hire_date, job_id, salary, department_id from employees where (hire_date>'01-May-1999' or salary>=10000 and job_id!='SA_REP')
+
+REM: 15. Display the employee details (first name, salary, hire date and dept id) whose
+salary falls in the range of 5000 to 15000 and his/her name begins with any of
+characters (A,J,K,S). Sort the output by first name.
+
+select first_name, salary, hire_date, department_id from employees where (salary>=5000 and salary<=15000) and first_name like 'A%' or first_name like 'J%' or first_name like 'K%' or first_name like 'S%' order by first_name
+
+REM: 16. Display the experience of employees in no. of years and months who were hired
+after 1998. Label the columns as: (EMPLOYEE_ID, FIRST_NAME, HIRE_DATE, EXP-YRS,
+EXP-MONTHS)
+
+
+REM: 17. Display the total number of departments.
+
+select count(distinct(department_id)) from employees;
+
+REM: 18. Show the number of employees hired by year-wise. Sort the result by year-wise.
+
+select employee_id from employees group by hire_date order by hire_date;
+
