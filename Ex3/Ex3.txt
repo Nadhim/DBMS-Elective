@@ -49,3 +49,11 @@ REM: 18. Show the number of employees hired by year-wise. Sort the result by yea
 
 select employee_id from employees group by hire_date order by hire_date;
 
+REM: 19. Display the minimum, maximum and average salary, number of employees for each department. Exclude the employee(s) who are not in any department. Include the department(s) with at least 2 employees and the average salary is more than 10000. Sort the result by minimum salary in descending order.
+
+select min(salary), max(salary), avg(salary), count(*), department_id
+from employees
+where department_id IS NOT NULL
+having count(department_id)>=2 and avg(salary)>100
+group by department_id
+order by min(salary) desc
