@@ -1,32 +1,17 @@
-REM SAMPLE DEMO
-REM*************
+INSERT INTO classes (Class, type, country, numGuns, bore, displacement)
+VALUES ('Bismark', 'bb', 'Germany', 8, 14, 32000);
 
-REM DROPing the relations
-REM----------------------
+INSERT INTO classes (Class, type, country, numGuns, bore, displacement)
+VALUES ('Iowa', 'bb', 'USA', 9, 16, 46000);
 
-drop table student;
+INSERT INTO classes (Class, type, country, numGuns, bore, displacement)
+VALUES ('Kongo', 'bc', 'Japan', 8, 15, 42000);
 
-REM CREATING STUDENT RELATION
-REM--------------------------
+INSERT INTO classes (Class, type, country, numGuns, bore, displacement)
+VALUES ('North Carolina', 'bb', 'USA', 9, 16, 37000);
 
-CREATE TABLE STUDENT(
-REG_NO NUMBER(5),
-NAME VARCHAR2(25),
-PHONE NUMBER(8),
-DOB DATE
-);
+INSERT INTO classes (Class, type, country, numGuns, bore, displacement)
+VALUES ('Revenge', 'bb', 'Gt. Britain', 8, 15, 29000);
 
-REM DESCRIBING TABLE STRUCTURE
-REM----------------------------
-
-desc student;
-
-REM :TYPE THE QUESTION HERE
-
-insert into student values(
-12334,'KRISH',34933,'01-mar-1990');
-
-
-REM :TYPE THE QUESTION HERE
-
-select * from student;
+INSERT INTO classes (Class, type, country, numGuns, bore, displacement)
+VALUES ('Renown', 'bc', 'Gt. Britain', 6, 15, 32000);

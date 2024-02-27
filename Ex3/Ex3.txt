@@ -57,3 +57,54 @@ where department_id IS NOT NULL
 having count(department_id)>=2 and avg(salary)>100
 group by department_id
 order by min(salary) desc
+
+
+REM: PART 1 - DML UPDATE OPERATIONS & TCL STATEMENTS
+
+REM: 1. Populate the relation with the above set of tuples using INSERT clause.
+
+create table classes( class varchar(20), type varchar(2), country varchar(20), numguns number(6), bore number(3), displacement number(10))
+
+INSERT INTO classes VALUES ('bb', 'Germany', 8, 14, 32000);
+
+INSERT INTO classes VALUES ('bb', 'USA', 9, 16, 46000);
+
+INSERT INTO classes VALUES ('bc', 'Japan', 8, 15, 42000);
+
+INSERT INTO classes VALUES ('bb', 'USA', 9, 16, 37000);
+
+INSERT INTO classes (class_type, country, numGuns, bore, displacement)
+VALUES ('bb', 'Gt. Britain', 8, 15, 29000);
+
+INSERT INTO classes VALUES ('bc', 'Gt. Britain', 6, 15, 32000);
+
+REM: 2. Display the populated relation.
+
+select * from classes;
+
+REM: 3. Mark an intermediate point here in this transaction.
+
+savepoint intermediate_point
+
+REM: 4. For the battleships having at least 9 number of guns or the ships with at least 15 inch bore, increase the displacement by 10%.
+
+update  classes 
+set displacement=displacement + (displacement*0.1) 
+where numguns>=9 or bore>=15;
+
+REM: 5. Delete Kongo class of ship from Classes table.
+
+delete from classes
+where class='Kongo';
+
+REM: 6. Display your changes to the table.
+
+select*from classes;
+
+REM: 7. Discard the recent updates to the relation without discarding the earlier INSERT operation(s).
+
+rollback to intermediate_point;
+
+REM: 8. Commit the changes
+
+commit;
