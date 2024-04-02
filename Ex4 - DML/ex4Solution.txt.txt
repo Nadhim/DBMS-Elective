@@ -1,0 +1,174 @@
+REM: Create tables with appropriate data types and integrity constraints in
+order to populate tables from the Pizza_DB.sql file.
+
+
+drop table customer;
+drop table pizza;
+drop table orders;
+drop table order_list;
+REM 
+create table customer(cust_id varchar(20) PRIMARY KEY, cust_name varchar(30), address varchar(30), phone number(30));
+REM 
+create table pizza (pizza_id varchar(20) PRIMARY KEY, pizza_type varchar(30), unit_price number(20));
+REM 
+create table orders(order_no varchar(20) PRIMARY KEY, cust_id varchar(20), order_date date,delv_date date);
+REM 
+create table order_list(order_no varchar(30), pizza_id varchar(30), qty number(30) NOT NULL, primary key(order_no, pizza_id));
+
+
+REM: 1. For each pizza, display the total quantity ordered by the customers.
+
+SELECT p.pizza_id, p.pizza_type, SUM(ol.qty) AS total_quantity_ordered
+FROM pizza p
+JOIN order_list ol ON p.pizza_id = ol.pizza_id
+GROUP BY p.pizza_id, p.pizza_type;
+
+
+REM: 2. Find the pizza type(s) that is not delivered on the ordered day.
+
+SELECT DISTINCT p.pizza_type
+FROM pizza p
+LEFT JOIN order_list ol ON p.pizza_id = ol.pizza_id
+LEFT JOIN orders o ON ol.order_no = o.order_no
+WHERE o.delv_date IS NULL;
+
+REM: 3. Display the number of order(s) placed by each customer whether or not
+he/she placed the order.
+
+SELECT c.cust_id, c.cust_name, COUNT(o.order_no) AS num_orders_placed
+FROM customer c
+LEFT JOIN orders o ON c.cust_id = o.cust_id
+GROUP BY c.cust_id, c.cust_name;
+
+
+REM: 4. Find the pairs of pizzas such that the ordered quantity of first pizza type is
+more than the second for the order OP100.
+
+SELECT ol1.pizza_id AS first_pizza_id, ol2.pizza_id AS second_pizza_id
+FROM order_list ol1
+JOIN order_list ol2 ON ol1.order_no = ol2.order_no AND ol1.pizza_id <> ol2.pizza_id
+WHERE ol1.order_no = 'OP100' AND ol1.qty > ol2.qty;
+
+
+REM: 5. Display the details (order number, pizza type, customer name, qty) of the
+pizza with ordered quantity more than the average ordered quantity of
+pizzas.
+
+SELECT o.order_no, p.pizza_type, c.cust_name, ol.qty
+FROM orders o
+JOIN order_list ol ON o.order_no = ol.order_no
+JOIN pizza p ON ol.pizza_id = p.pizza_id
+JOIN customer c ON o.cust_id = c.cust_id
+WHERE ol.qty > (SELECT AVG(qty) FROM order_list)
+ORDER BY o.order_no;
+
+
+REM: 6. Find the customer(s) who ordered for more than one pizza type in each
+order.
+
+SELECT c.cust_id, c.cust_name, o.order_no
+FROM customer c
+JOIN orders o ON c.cust_id = o.cust_id
+JOIN (
+    SELECT order_no
+    FROM order_list
+    GROUP BY order_no
+    HAVING COUNT(DISTINCT pizza_id) > 1
+) AS multi_pizza_orders ON o.order_no = multi_pizza_orders.order_no;
+
+
+REM: 7. Display the details (order number, pizza type, customer name, qty) of the
+pizza with ordered quantity more than the average ordered quantity of
+each pizza type.
+
+
+SELECT o.order_no, p.pizza_type, c.cust_name, ol.qty
+FROM orders o
+JOIN order_list ol ON o.order_no = ol.order_no
+JOIN pizza p ON ol.pizza_id = p.pizza_id
+JOIN customer c ON o.cust_id = c.cust_id
+WHERE ol.qty > (
+    SELECT AVG(qty)
+    FROM order_list
+    WHERE pizza_id = ol.pizza_id
+)
+ORDER BY o.order_no;
+
+
+REM: 8. Display the details (order number, pizza type, customer name, qty) of the
+pizza with ordered quantity more than the average ordered quantity of its
+pizza type. (Use correlated)
+
+SELECT o.order_no, p.pizza_type, c.cust_name, ol.qty
+FROM orders o
+JOIN order_list ol ON o.order_no = ol.order_no
+JOIN pizza p ON ol.pizza_id = p.pizza_id
+JOIN customer c ON o.cust_id = c.cust_id
+WHERE ol.qty > (
+    SELECT AVG(ol_inner.qty)
+    FROM order_list ol_inner
+    WHERE ol_inner.pizza_id = ol.pizza_id
+)
+ORDER BY o.order_no;
+
+
+REM: 9. Display the customer details who placed all pizza types in a single order.
+
+SELECT c.cust_id, c.cust_name
+FROM customer c
+JOIN orders o ON c.cust_id = o.cust_id
+JOIN (
+    SELECT order_no, COUNT(DISTINCT pizza_id) AS num_unique_pizzas
+    FROM order_list
+    GROUP BY order_no
+    HAVING COUNT(DISTINCT pizza_id) = (
+        SELECT COUNT(*) FROM pizza
+    )
+) AS order_with_all_pizzas ON o.order_no = order_with_all_pizzas.order_no;
+
+
+REM: 10.Display the order details that contains the pizza quantity more than the
+average quantity of any of Pan or Italian pizza type.
+
+SELECT o.order_no, p.pizza_type, c.cust_name, ol.qty
+FROM orders o
+JOIN order_list ol ON o.order_no = ol.order_no
+JOIN pizza p ON ol.pizza_id = p.pizza_id
+JOIN customer c ON o.cust_id = c.cust_id
+WHERE ol.qty > (
+    SELECT AVG(ol_inner.qty)
+    FROM order_list ol_inner
+    JOIN pizza p_inner ON ol_inner.pizza_id = p_inner.pizza_id
+    WHERE p_inner.pizza_type IN ('Pan', 'Italian')
+)
+ORDER BY o.order_no;
+
+
+
+REM: 11.Find the order(s) that contains Pan pizza but not the Italian pizza type.
+
+
+SELECT DISTINCT o.order_no
+FROM orders o
+JOIN order_list ol_pan ON o.order_no = ol_pan.order_no
+JOIN pizza p_pan ON ol_pan.pizza_id = p_pan.pizza_id
+LEFT JOIN order_list ol_italian ON o.order_no = ol_italian.order_no
+LEFT JOIN pizza p_italian ON ol_italian.pizza_id = p_italian.pizza_id
+WHERE p_pan.pizza_type = 'Pan' AND p_italian.pizza_type IS NULL;
+
+
+REM: 12. Display the customer(s) who ordered both Italian and Grilled pizza type
+
+SELECT c.cust_id, c.cust_name
+FROM customer c
+JOIN orders o ON c.cust_id = o.cust_id
+JOIN order_list ol_italian ON o.order_no = ol_italian.order_no
+JOIN pizza p_italian ON ol_italian.pizza_id = p_italian.pizza_id
+JOIN order_list ol_grilled ON o.order_no = ol_grilled.order_no
+JOIN pizza p_grilled ON ol_grilled.pizza_id = p_grilled.pizza_id
+WHERE p_italian.pizza_type = 'Italian'
+  AND p_grilled.pizza_type = 'Grilled';
+
+
+
+
